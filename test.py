@@ -201,3 +201,53 @@ if score > 60:
     print("Possible Plagiarism Detected")
 else:
     print("Low Similarity (Safe)")
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+import pandas as pd
+import numpy as np
+
+from sklearn.model_selection import train_test_split
+from sklearn.feature_extraction.text import TfidfVectorizer
+from sklearn.pipeline import Pipeline
+from sklearn.naive_bayes import MultinomialNB
+
+
+df = pd.read_csv("/content/spam.csv")
+
+
+print(df.head())
+print(df.info())
+
+
+X = df["Message"]
+y = df["Category"]
+
+
+X_train, X_test, y_train, y_test = train_test_split(
+    X, y, test_size=0.2, random_state=10
+)
+
+
+pipe = Pipeline([
+    ("vectorizer", TfidfVectorizer()),
+    ("model", MultinomialNB())
+])
+
+
+pipe.fit(X_train, y_train)
+
+
+prediction = pipe.predict(["Free iPhone! Just login to this link"])
+print(prediction)
